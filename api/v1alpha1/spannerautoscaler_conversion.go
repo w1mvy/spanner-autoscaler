@@ -42,6 +42,10 @@ func (src *SpannerAutoscaler) ConvertTo(dstRaw conversion.Hub) error {
 		}
 	}
 
+	if src.Spec.ImpersonateConfig == nil && src.Spec.ServiceAccountSecretRef == nil {
+		auth.Type = v1beta1.AuthTypeADC
+	}
+
 	dst.Spec.Authentication = auth
 
 	scaleConfig := v1beta1.ScaleConfig{}

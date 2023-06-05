@@ -100,6 +100,13 @@ var _ = Describe("ConvertTo", func() {
 				},
 			},
 		),
+		Entry("AuthType is single sa Workload Identity",
+			nil,
+			nil,
+			v1beta1.Authentication{
+				Type: v1beta1.AuthTypeADC,
+			},
+		),
 	)
 
 	DescribeTable("scaleConfig",
@@ -111,6 +118,8 @@ var _ = Describe("ConvertTo", func() {
 			src.Spec.MaxScaleDownNodes = maxScaleDownNodes
 
 			expected.Spec.ScaleConfig = expectedScaleConfig
+
+			expected.Spec.Authentication.Type = v1beta1.AuthTypeADC
 
 			err := src.ConvertTo(dest)
 			Expect(err).NotTo(HaveOccurred())
@@ -148,6 +157,7 @@ var _ = Describe("ConvertTo", func() {
 		func(objectMeta metav1.ObjectMeta) {
 			src.ObjectMeta = objectMeta
 			expected.ObjectMeta = objectMeta
+			expected.Spec.Authentication.Type = v1beta1.AuthTypeADC
 
 			err := src.ConvertTo(dest)
 			Expect(err).NotTo(HaveOccurred())
@@ -163,6 +173,7 @@ var _ = Describe("ConvertTo", func() {
 		func(status SpannerAutoscalerStatus, expectedStatus v1beta1.SpannerAutoscalerStatus) {
 			src.Status = status
 			expected.Status = expectedStatus
+			expected.Spec.Authentication.Type = v1beta1.AuthTypeADC
 
 			err := src.ConvertTo(dest)
 			Expect(err).NotTo(HaveOccurred())
